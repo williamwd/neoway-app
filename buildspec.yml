@@ -1,0 +1,22 @@
+version: 0.2
+
+env:
+  variables:
+     VERSION_APP: 0.1
+
+phases:
+  install:
+    runtime-versions:
+      docker: 18
+      golang: 1.13
+  pre_build:
+    commands:
+      - make test
+  build:
+    commands:
+      - make image VERSION=$VERSION_APP
+      - make publish VERSION=$VERSION_APP
+  post_build:
+    commands:
+      - echo 'Built successfully!'
+      - echo 'Deploying application'
