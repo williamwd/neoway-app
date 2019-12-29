@@ -11,7 +11,7 @@ image: guard-VERSION ## Build image
 	docker build -t $(IMAGE) .
 
 publish: guard-VERSION ## Publish image
-	docker tag $(IMAGE_LATEST) $(IMAGE)
+	docker tag $(IMAGE) $(IMAGE_LATEST)
 	docker push $(IMAGE)
 	docker push $(IMAGE_LATEST)
 
