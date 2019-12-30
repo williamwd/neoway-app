@@ -2,10 +2,9 @@
 
 # if you want to use your own registry, change "REGISTRY" value
 REGISTRY       	= $(PROVISIONED_REGISTRY)
-REGISTRY_USER   = $(REGISTRY)
-NAME            = neoway-app
-IMAGE           = $(REGISTRY_USER)/$(NAME):$(VERSION)
-IMAGE_LATEST	= $(REGISTRY)/$(NAME):latest
+NAME            = neoway-app-registry
+IMAGE           = $(REGISTRY):$(VERSION)
+IMAGE_LATEST	= $(REGISTRY):latest
 
 image: guard-VERSION ## Build image
 	docker build -t $(IMAGE) .
@@ -20,7 +19,7 @@ run: ## Run locally
 	go run .
 
 run-docker: guard-VERSION ## Run docker container
-	docker run --rm -d --name $(NAME) -d -p 5000:5000 $(REGISTRY_USER)/$(NAME):$(VERSION)
+	docker run --rm -d --name $(NAME) -d -p 5000:5000 $(IMAGE)
 
 test:
 	go test -coverprofile=coverage.out ./...
