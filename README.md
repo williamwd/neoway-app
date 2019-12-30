@@ -74,6 +74,18 @@ If everything looks good with the plan, you can apply it. Watch out for unwanted
 terraform apply --var-file=main.tfvars
 ```
 
+After provisioning it you must configure the correct Docker registry. This happens because the necessary URL is not available before provisioning the ECR service. The URL will be the last output from the previous command, but you can output it again using:
+
+```bash
+terraform output
+```
+
+On the provisioned environment it will be configured automatically, but if you want to generate the images locally, you must set the environment variable "PROVISIONED_REGISTRY"
+
+```bash
+export PROVISIONED_REGISTRY=<Output ECR URL>
+```
+
 ### Destroying it
 
 If you want to destroy the provisioned environment, just let terraform do it for you. Note that empty S3 buckets will not be deleted automatically
