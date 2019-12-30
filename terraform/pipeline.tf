@@ -3,6 +3,15 @@ resource "aws_s3_bucket" "codepipeline_bucket" {
   acl = "private"
 }
 
+resource "aws_ecr_repository" "neoway-app-registry" {
+  name = "${var.key}-registry"
+  image_tag_mutability = "IMMUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = false
+  }
+}
+
 resource "aws_codebuild_project" "neoway-app-codebuild" {
   name          = "neoway-app-codebuild"
   description   = "Neoway app codebuild project"
