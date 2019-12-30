@@ -22,6 +22,10 @@ variable "ssh_allowed_ips" {
     type = list
 }
 
+variable "ssh_key_path" {
+    type = string
+}
+
 variable "github_auth" {
     type = string
 }

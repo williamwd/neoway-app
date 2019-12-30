@@ -8,6 +8,11 @@ data "aws_elastic_beanstalk_solution_stack" "single_docker" {
   name_regex = "^64bit Amazon Linux (.*) v(.*) running Docker (.*)$"
 }
 
+resource "aws_key_pair" "neoway-app-ssh-key" {
+  key_name   = "${var.key}-ssh-key"
+  public_key = data.local_file.ssh_key.content
+}
+
 
 resource "aws_elastic_beanstalk_environment" "ebs-env" {
     name = "${var.key}-env"
@@ -31,6 +36,12 @@ resource "aws_elastic_beanstalk_environment" "ebs-env" {
         namespace = "aws:autoscaling:launchconfiguration"
         name = "IamInstanceProfile"
         value = aws_iam_instance_profile.ec2-ecr-profile.name
+    }
+
+    setting {
+        namespace = "aws:autoscaling:launchconfiguration"
+        name = "EC2KeyName"
+        value = aws_key_pair.neoway-app-ssh-key.key_name
     }
 
     setting {
