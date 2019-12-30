@@ -32,12 +32,13 @@ resource "aws_codebuild_project" "neoway-app-codebuild" {
         image           = "aws/codebuild/standard:3.0"
         type            = "LINUX_CONTAINER"
         privileged_mode = "true"
+
+        environment_variable {
+            name  = "PROVISIONED_REGISTRY"
+            value = aws_ecr_repository.neoway-app-registry.repository_url
+        }
     }
 
-    environment_variable {
-        name  = "PROVISIONED_REGISTRY"
-        value = aws_ecr_repository.neoway-app-registry.repository_url
-    }
 
     source {
         type = "CODEPIPELINE"
