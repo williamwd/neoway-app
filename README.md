@@ -74,7 +74,7 @@ If everything looks good with the plan, you can apply it. Watch out for unwanted
 terraform apply --var-file=main.tfvars
 ```
 
-After provisioning it you must configure the correct Docker registry. This happens because the necessary URL is not available before provisioning the ECR service. The URL will be the last output from the previous command, but you can output it again using:
+After provisioning it you must configure the correct Docker registry. This happens because the necessary URL is not available before provisioning the ECR service. The URL will be output from the previous command, but you can output it again using:
 
 ```bash
 terraform output
@@ -85,6 +85,10 @@ On the provisioned environment it will be configured automatically, but if you w
 ```bash
 export PROVISIONED_REGISTRY=<Output ECR URL>
 ```
+
+### SSH Access
+
+The CNAME from the provisioned environment will be output from terraform apply, but in order to connect you must know that the ssh user is "ec2-user", as it is running an Amazon Linux
 
 ### Destroying it
 
