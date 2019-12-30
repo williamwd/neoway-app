@@ -5,7 +5,7 @@ resource "aws_s3_bucket" "codepipeline_bucket" {
 
 resource "aws_ecr_repository" "neoway-app-registry" {
   name = "${var.key}-registry"
-  image_tag_mutability = "IMMUTABLE"
+  image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
     scan_on_push = false
@@ -13,34 +13,39 @@ resource "aws_ecr_repository" "neoway-app-registry" {
 }
 
 resource "aws_codebuild_project" "neoway-app-codebuild" {
-  name          = "neoway-app-codebuild"
-  description   = "Neoway app codebuild project"
-  build_timeout = "5"
-  service_role  = aws_iam_role.neoway-app-role.arn
+    name          = "neoway-app-codebuild"
+    description   = "Neoway app codebuild project"
+    build_timeout = "5"
+    service_role  = aws_iam_role.neoway-app-role.arn
 
-  artifacts {
-    type = "CODEPIPELINE"
-  }
+    artifacts {
+        type = "CODEPIPELINE"
+    }
 
-  cache {
-    type     = "S3"
-    location = aws_s3_bucket.codepipeline_bucket.bucket
-  }
+    cache {
+        type     = "S3"
+        location = aws_s3_bucket.codepipeline_bucket.bucket
+    }
 
-  environment {
-    compute_type    = "BUILD_GENERAL1_SMALL"
-    image           = "aws/codebuild/standard:3.0"
-    type            = "LINUX_CONTAINER"
-    privileged_mode = "true"
-  }
+    environment {
+        compute_type    = "BUILD_GENERAL1_SMALL"
+        image           = "aws/codebuild/standard:3.0"
+        type            = "LINUX_CONTAINER"
+        privileged_mode = "true"
+    }
 
-  source {
-    type = "CODEPIPELINE"
-  }
+    environment_variable {
+        name  = "PROVISIONED_REGISTRY"
+        value = aws_ecr_repository.neoway-app-registry.repository_url
+    }
 
-  tags = {
-    name = "neoway-app-build"
-  }
+    source {
+        type = "CODEPIPELINE"
+    }
+
+    tags = {
+        name = "neoway-app-build"
+    }
 }
 
 resource "aws_codepipeline" "neoway-app-pipeline" {

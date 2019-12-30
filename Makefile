@@ -1,7 +1,7 @@
 .PHONY: image publish run run-docker test
 
 # if you want to use your own registry, change "REGISTRY" value
-REGISTRY       = 533649339973.dkr.ecr.us-east-1.amazonaws.com
+REGISTRY       	= $(PROVISIONED_REGISTRY)
 REGISTRY_USER   = $(REGISTRY)
 NAME            = neoway-app
 IMAGE           = $(REGISTRY_USER)/$(NAME):$(VERSION)
@@ -9,6 +9,7 @@ IMAGE_LATEST	= $(REGISTRY)/$(NAME):latest
 
 image: guard-VERSION ## Build image
 	docker build -t $(IMAGE) .
+	@echo "{\"AWSEBDockerrunVersion\": \"1\",\"Image\": {\"Name\": \"$(IMAGE_LATEST)\",\"Update\": \"true\"},\"Ports\":[{\"ContainerPort\": \"5000\"}]}" > Dockerrun.aws.json
 
 publish: guard-VERSION ## Publish image
 	docker tag $(IMAGE) $(IMAGE_LATEST)
