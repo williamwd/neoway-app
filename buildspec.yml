@@ -21,3 +21,6 @@ phases:
     commands:
       - echo 'Built successfully!'
       - echo 'Deploying application'
+artifacts:
+    files:
+        - Dockerrun.aws.json
