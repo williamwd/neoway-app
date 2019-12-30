@@ -74,4 +74,19 @@ If everything looks good with the plan, you can apply it. Watch out for unwanted
 terraform apply --var-file=main.tfvars
 ```
 
+### Destroying it
+
+If you want to destroy the provisioned environment, just let terraform do it for you. Note that empty S3 buckets will not be deleted automatically
+
+```bash
+terraform destroy --var-file=main.tfvars
+```
+
+### Important notes
+
 - If you don't specify the --var-file, Terraform will ask you to enter manually all variables contained in that file
+- Please consider your application security by configuring your public IP on "main.tfvars", so only connections from your public IP would reach your server instance. You can get your public IP with the following command on Linux
+
+```bash
+dig +short myip.opendns.com @resolver1.opendns.com
+```
